@@ -5,6 +5,7 @@
 #![test_runner(blog_os::test_runner)]
 
 
+
 #![reexport_test_harness_main = "test_main"]
 
 use core::panic::PanicInfo;
@@ -14,7 +15,7 @@ use blog_os::println;
 #[panic_handler]
 fn panic(_info: &PanicInfo) -> ! {
     println!("my_panic:{}", _info);
-    loop {}
+    blog_os::hlt_loop();   
 }
 #[cfg(test)]
 #[panic_handler]
@@ -43,7 +44,7 @@ pub extern "C" fn _start() -> ! {
     }
 
     // 触发 stack overflow
-    stack_overflow();
+    // stack_overflow();
 
 
     // as before
@@ -51,6 +52,9 @@ pub extern "C" fn _start() -> ! {
     test_main();
 
     println!("It did not crash!");
-    
-    loop {}
+    blog_os::hlt_loop();
+    loop {
+        use blog_os::print;
+        print!("-");  
+    }
 }
